@@ -3,7 +3,7 @@
     "cpu-test-base-machine": "Mac Mini with 2.3 GHz i7 processors, 16GB RAM, 250GB SSD",
     "cpu-test-docker-settings": "2 cores, 4GB RAM",
     "test_cpu_speed_mini_sequence_labeler": {
-        "mean": 6.4085,
+        "mean": 100,
         "sigma": 0.09649999999999981
     },
     "test_cpu_speed_mnist": {
