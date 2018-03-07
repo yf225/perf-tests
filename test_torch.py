@@ -25,5 +25,6 @@ if args.update_data_file_path:
 	    update_data = json.load(update_data_file)
 
 # torch.is_tensor
-runtime = timeit.timeit(stmt='torch.is_tensor(torch.ones(1, 1))', setup='import torch', number=20)
-print(runtime)
+timer = timeit.Timer(stmt='torch.is_tensor(torch.ones(1, 1))', setup='import torch')
+min_runtime = min(timer.repeat(repeat = 100000, number=1))
+print(min_runtime)
