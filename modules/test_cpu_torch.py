@@ -33,7 +33,7 @@ if args.update_data_file_path:
 runtimes = []
 for i in range(200):
     timer = timeit.Timer(stmt='torch.is_tensor(t)', setup='import torch; t = torch.ones(1, 1)')
-    min_runtime = min(timer.repeat(repeat = 100, number=1))
+    min_runtime = min(timer.repeat(repeat = 1000, number=1))
     runtimes += [min_runtime]
 print(numpy.mean(runtimes))
 print(numpy.std(runtimes))
