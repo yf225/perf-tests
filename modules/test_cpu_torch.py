@@ -31,7 +31,7 @@ if args.update_data_file_path:
 # subprocess.run(['time python -c "import torch"'], stdout=subprocess.PIPE, shell=True).stdout.decode('utf-8')
 
 runtimes = []
-for i in range(200):
+for i in range(20):
     timer = timeit.Timer(stmt='torch.is_tensor(t)', setup='import torch; t = torch.ones(1, 1)')
     min_runtime = min(timer.repeat(repeat = 1000, number=1))
     runtimes += [min_runtime]
