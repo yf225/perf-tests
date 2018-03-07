@@ -2,6 +2,7 @@ import sys
 import timeit
 import torch
 import argparse
+import numpy
 
 parser = argparse.ArgumentParser(description='Process some integers.')
 parser.add_argument('--compare', dest='compare_data_file_path', action='store',
@@ -23,5 +24,6 @@ if args.update_data_file_path:
 	with open(args.update_data_file_path) as update_data_file:
 	    update_data = json.load(update_data_file)
 
-runtime = timeit.timeit(stmt='torch.is_tensor(torch.ones(1, 1))', setup='import torch', number=1000)
+# torch.is_tensor
+runtime = timeit.timeit(stmt='torch.is_tensor(torch.ones(1, 1))', setup='import torch', number=20)
 print(runtime)
