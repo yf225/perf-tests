@@ -28,6 +28,7 @@ if args.update_data_file_path:
         update_data = json.load(update_data_file)
 
 def measure(test_name, stmt, setup, number, repeat, trial=0):
+    print('Testing: {} ...'.format(test_name))
     runtimes = []
     for i in range(repeat):
         runtimes += [timeit.timeit(stmt=stmt, setup=setup, number=number)]
