@@ -5,12 +5,12 @@
     "cpu-test-docker-settings": "2 cores, 4GB RAM",
 
     "test_cpu_speed_mini_sequence_labeler": {
-        "mean": "6.75325",
+        "mean": "100",
         "sigma": "0.62155"
     },
 
     "test_cpu_speed_mnist": {
-        "mean": "30.86437",
+        "mean": "100",
         "sigma": "2.0945721121747041"
     }
 }
