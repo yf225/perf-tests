@@ -30,21 +30,18 @@ if args.update_data_file_path:
 # subprocess.run(['time python -c "import torch; t = torch.ones(10000, 10000).fill_(100); torch.is_tensor(t)"'], stdout=subprocess.PIPE, shell=True).stdout.decode('utf-8')
 # subprocess.run(['time python -c "import torch"'], stdout=subprocess.PIPE, shell=True).stdout.decode('utf-8')
 
-# avg_runtimes = []
-# for k in range(20):
-#     runtimes = []
-#     for i in range(20):
-#         timer = timeit.Timer(stmt='torch.is_tensor(t)', setup='import torch; t = torch.ones(1, 1)')
-#         runtime = timer.timeit(number=1000)
-#         runtimes += [runtime]
-#     avg_runtimes += [numpy.mean(runtimes)]
-# print(numpy.mean(avg_runtimes))
-# print(numpy.std(avg_runtimes))
+runtimes = []
+for i in range(200):
+    timer = timeit.Timer(stmt='torch.is_tensor(t)', setup='import torch; t = torch.ones(1, 1)')
+    runtime = timer.timeit(number=1000)
+    runtimes += [runtime]
+print(numpy.mean(runtimes))
+print(numpy.std(runtimes))
 
-from time import process_time, perf_counter
+# from time import process_time, perf_counter
 
 # Setup
-t = torch.ones(1, 1)
+# t = torch.ones(1, 1)
 
 # start_time = perf_counter()
 
@@ -57,12 +54,12 @@ t = torch.ones(1, 1)
 
 # print("")
 
-runtimes = []
-for k in range(200):
-    start_time = process_time()
-    for i in range(1000):
-        torch.is_tensor(t)
-    elapsed_time = process_time() - start_time
-    runtimes += [elapsed_time]
-print(numpy.mean(runtimes))
-print(numpy.std(runtimes))
+# runtimes = []
+# for k in range(200):
+#     start_time = process_time()
+#     for i in range(1000):
+#         torch.is_tensor(t)
+#     elapsed_time = process_time() - start_time
+#     runtimes += [elapsed_time]
+# print(numpy.mean(runtimes))
+# print(numpy.std(runtimes))
