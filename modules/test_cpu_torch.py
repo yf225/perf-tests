@@ -5,6 +5,8 @@ import argparse
 import numpy
 import subprocess
 
+MAX_TRIAL = 3
+
 parser = argparse.ArgumentParser(description='Process some integers.')
 parser.add_argument('--compare', dest='compare_data_file_path', action='store',
                     help='perf test data to compare with')
@@ -25,41 +27,38 @@ if args.update_data_file_path:
     with open(args.update_data_file_path) as update_data_file:
         update_data = json.load(update_data_file)
 
-# torch.is_tensor
+def measure(test_name, stmt, setup, number, repeat, trial=0):
+    runtimes = []
+    for i in range(repeat):
+        runtimes += [timeit.timeit(stmt=stmt, setup=setup, number=number)]
+    sample_mean = numpy.mean(runtimes)
+    sample_sigma = numpy.std(runtimes)
+    print("sample mean: ", sample_mean)
+    print("sample sigma: ", sample_sigma)
 
-# subprocess.run(['time python -c "import torch; t = torch.ones(10000, 10000).fill_(100); torch.is_tensor(t)"'], stdout=subprocess.PIPE, shell=True).stdout.decode('utf-8')
-# subprocess.run(['time python -c "import torch"'], stdout=subprocess.PIPE, shell=True).stdout.decode('utf-8')
+    trial += 1
+    if should_compare:
+        baseline_mean = compare_data[test_name]['mean']
+        baseline_sigma = compare_data[test_name]['sigma']
+        z_value = (sample_mean - baseline_mean) / baseline_sigma
+        if z_value >= 3:
+            if trial == MAX_TRIAL:
+                raise Exception('''\n
+z-value >= 3 in all {} trials, there is perf regression.\n
+'''.format(trial))
+            else:
+                measure(test_name, stmt, setup, number, repeat, trial)
+        else:
+            print("z-value < 3, no perf regression detected.")
 
-runtimes = []
-for i in range(200):
-    timer = timeit.Timer(stmt='torch.is_tensor(t)', setup='import torch; t = torch.ones(1, 1)')
-    runtime = timer.timeit(number=1000)
-    runtimes += [runtime]
-print(numpy.mean(runtimes))
-print(numpy.std(runtimes))
+    if should_update:
+        update_data[test_name]['mean'] = sample_mean
+        update_data[test_name]['sigma'] = sample_sigma
+        with open(args.update_data_file_path, 'w') as update_data_file:
+            json.dump(update_data, update_data_file, indent=4)
 
-# from time import process_time, perf_counter
-
-# Setup
-# t = torch.ones(1, 1)
-
-# start_time = perf_counter()
-
-# for i in range(10000):
-#     torch.is_tensor(t)
-
-# elapsed_time = perf_counter() - start_time
-
-# print(elapsed_time)
-
-# print("")
-
-# runtimes = []
-# for k in range(200):
-#     start_time = process_time()
-#     for i in range(1000):
-#         torch.is_tensor(t)
-#     elapsed_time = process_time() - start_time
-#     runtimes += [elapsed_time]
-# print(numpy.mean(runtimes))
-# print(numpy.std(runtimes))
+measure(test_name='torch.numel',
+        stmt='torch.numel(t)',
+        setup='import torch; t = torch.ones(1, 1)',
+        number=1000,
+        repeat=200)
