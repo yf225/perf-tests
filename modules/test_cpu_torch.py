@@ -67,7 +67,7 @@ z-value >= 3 in all {} trials, there is perf regression.\n
         if not test_name in update_data:
             update_data[test_name] = {}
         update_data[test_name]['mean'] = sample_mean
-        update_data[test_name]['sigma'] = sample_sigma * 3 # Allow a larger margin
+        update_data[test_name]['sigma'] = max(sample_sigma, sample_mean * 0.1) # Allow a larger margin
         with open(args.update_data_file_path, 'w') as update_data_file:
             json.dump(update_data, update_data_file, indent=4)
 
