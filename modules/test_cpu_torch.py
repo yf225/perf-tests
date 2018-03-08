@@ -362,8 +362,8 @@ torch.normal(means=means_range, std=std_range)
 ''',
         setup='''
 import torch
-means_range = torch.arange(1, 11)
-std_range = torch.arange(1, 11)
+means_range = torch.arange(1, 11).data
+std_range = torch.arange(1, 11).data
 ''',
         number=1000,
         repeat=200)
