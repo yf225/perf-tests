@@ -1,13 +1,13 @@
 {
-    "commit": "08f9cad1407058437b64b1265f9c582b11a14020",
+    "commit": "28b1c94f0f06d4acdff418b1f78db82fec470084",
     "cpu-test-base-machine": "Mac Mini with 2.3 GHz i7 processors, 16GB RAM, 250GB SSD",
     "cpu-test-docker-settings": "2 cores, 4GB RAM",
     "test_cpu_speed_mini_sequence_labeler": {
-        "mean": 6.5483,
-        "sigma": 0.6678948345360968
+        "mean": 6.6987499999999995,
+        "sigma": 0.5384103337604135
     },
     "test_cpu_speed_mnist": {
-        "mean": 30.96995,
-        "sigma": 1.4975390303761709
+        "mean": 30.646800000000002,
+        "sigma": 1.258952405772355
     }
 }
