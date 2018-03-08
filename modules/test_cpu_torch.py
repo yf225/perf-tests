@@ -358,12 +358,12 @@ weights = torch.Tensor([0, 10, 3, 0])
 
 measure(test_name='torch.normal',
         stmt='''
-torch.normal(means=means_range, std=std_range)
+torch.normal(means=means_range, std=std)
 ''',
         setup='''
 import torch
-means_range = torch.arange(1, 11).data
-std_range = torch.arange(1, 11).data
+means_range = torch.randn(5)
+std = 1.0
 ''',
         number=1000,
         repeat=200)
