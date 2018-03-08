@@ -1,30 +1,24 @@
 {
-    "commit": "492466f25fdf12b62f2043587130e9ee393e4b1c",
-
+    "commit": "c2721ab5039466ced3af077fae14d8ee578ff484",
     "gpu-test-base-machine": "g3.8xlarge",
-
     "test_gpu_speed_mnist": {
-        "mean": "100",
-        "sigma": "0.29402"
+        "mean": 11.867650000000001,
+        "sigma": 0.30313268959318784
     },
-
     "test_gpu_speed_word_language_model": {
-        "mean": "100",
-        "sigma": "0.015459301407243404"
+        "mean": 5.991299999999999,
+        "sigma": 0.02049658508142276
     },
-
     "test_gpu_speed_cudnn_lstm": {
-        "mean": "100",
-        "sigma": "0.21906"
+        "mean": 4.98525,
+        "sigma": 0.01604641704555881
     },
-
     "test_gpu_speed_lstm": {
-        "mean": "100",
-        "sigma": "0.13834"
+        "mean": 5.355549999999999,
+        "sigma": 0.07458919157625983
     },
-
     "test_gpu_speed_mlstm": {
-        "mean": "100",
-        "sigma": "0.0722"
+        "mean": 4.159350000000001,
+        "sigma": 0.013635523458965576
     }
 }
