@@ -31,6 +31,8 @@ if args.update_data_file_path:
         update_data = json.load(update_data_file)
 
 def measure(test_name, stmt, setup, number, repeat, trial=0):
+    if only_test_name and not test_name == only_test_name:
+        return
     print('Testing: {} ...'.format(test_name))
     trial += 1
 
@@ -70,6 +72,8 @@ z-value >= 3 in all {} trials, there is perf regression.\n
         update_data[test_name]['sigma'] = max(sample_sigma, sample_mean * 0.1) # Allow a larger margin
         with open(args.update_data_file_path, 'w') as update_data_file:
             json.dump(update_data, update_data_file, indent=4)
+
+only_test_name = 'torch.numel'
 
 measure(test_name='torch.numel',
         stmt='''
