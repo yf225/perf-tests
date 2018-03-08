@@ -4,27 +4,27 @@
     "gpu-test-base-machine": "g3.8xlarge",
 
     "test_gpu_speed_mnist": {
-        "mean": "11.66185",
+        "mean": "100",
         "sigma": "0.29402"
     },
 
     "test_gpu_speed_word_language_model": {
-        "mean": "6.0089",
+        "mean": "100",
         "sigma": "0.015459301407243404"
     },
 
     "test_gpu_speed_cudnn_lstm": {
-        "mean": "4.98804",
+        "mean": "100",
         "sigma": "0.21906"
     },
 
     "test_gpu_speed_lstm": {
-        "mean": "5.27968",
+        "mean": "100",
         "sigma": "0.13834"
     },
 
     "test_gpu_speed_mlstm": {
-        "mean": "4.11562",
+        "mean": "100",
         "sigma": "0.0722"
     }
 }
