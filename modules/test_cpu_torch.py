@@ -6,6 +6,7 @@ import numpy
 import subprocess
 import json
 import time
+from time import process_time
 
 MAX_TRIAL = 10
 COOLDOWN_PERIOD = 10
@@ -37,8 +38,20 @@ def measure(test_name, stmt, setup, number, repeat, trial=0):
     trial += 1
 
     runtimes = []
+
+    # Measure using timeit
+    # for i in range(repeat):
+    #     runtimes += [timeit.timeit(stmt=stmt, setup=setup, number=number)]
+
+    # Measure using time.process_time()
     for i in range(repeat):
-        runtimes += [timeit.timeit(stmt=stmt, setup=setup, number=number)]
+        exec(setup)
+        start_time = process_time()
+        for i in range(number):
+            exec(stmt)
+        elapsed_time = process_time() - start_time
+        runtimes += [elapsed_time]
+
     sample_mean = numpy.mean(runtimes)
     sample_sigma = numpy.std(runtimes)
     print("sample mean: ", sample_mean)
@@ -73,7 +86,7 @@ z-value >= 3 in all {} trials, there is perf regression.\n
         with open(args.update_data_file_path, 'w') as update_data_file:
             json.dump(update_data, update_data_file, indent=4)
 
-only_test_name = 'torch.numel'
+only_test_name = None
 
 measure(test_name='torch.numel',
         stmt='''
@@ -84,7 +97,7 @@ import torch
 t = torch.ones(1, 1)
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.eye',
         stmt='''
@@ -94,7 +107,7 @@ torch.eye(3)
 import torch
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.from_numpy',
         stmt='''
@@ -106,7 +119,7 @@ import numpy
 a = numpy.array([1, 2, 3])
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.linspace',
         stmt='''
@@ -116,7 +129,7 @@ torch.linspace(start=-10, end=10, steps=5)
 import torch
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.logspace',
         stmt='''
@@ -126,7 +139,7 @@ torch.logspace(start=0.1, end=1.0, steps=5)
 import torch
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.ones',
         stmt='''
@@ -136,7 +149,7 @@ torch.ones(2, 3)
 import torch
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.ones_like',
         stmt='''
@@ -147,7 +160,7 @@ import torch
 input = torch.FloatTensor(2, 3)
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.arange',
         stmt='''
@@ -157,7 +170,7 @@ torch.arange(1, 2.5, 0.5)
 import torch
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.zeros',
         stmt='''
@@ -167,7 +180,7 @@ torch.zeros(2, 3)
 import torch
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.zeros_like',
         stmt='''
@@ -178,7 +191,7 @@ import torch
 input = torch.FloatTensor(2, 3)
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.cat',
         stmt='''
@@ -189,7 +202,7 @@ import torch
 x = torch.randn(2, 3)
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.chunk',
         stmt='''
@@ -200,7 +213,7 @@ import torch
 t = torch.randn(3, 2)
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.gather',
         stmt='''
@@ -211,7 +224,7 @@ import torch
 t = torch.Tensor([[1,2],[3,4]])
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.index_select',
         stmt='''
@@ -223,7 +236,7 @@ x = torch.randn(3, 4)
 indices = torch.LongTensor([0, 2])
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.masked_select',
         stmt='''
@@ -235,7 +248,7 @@ x = torch.randn(3, 4)
 mask = x.ge(0.5)
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.nonzero',
         stmt='''
@@ -249,7 +262,7 @@ x = torch.Tensor([[0.6, 0.0, 0.0, 0.0],
                 [0.0, 0.0, 0.0,-0.4]])
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.split',
         stmt='''
@@ -260,7 +273,7 @@ import torch
 t = torch.randn(4, 2)
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.squeeze',
         stmt='''
@@ -271,7 +284,7 @@ import torch
 x = torch.zeros(2,1,2,1,2)
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.stack',
         stmt='''
@@ -283,7 +296,7 @@ x = torch.randn(2, 2)
 y = torch.randn(2, 2)
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.t',
         stmt='''
@@ -294,7 +307,7 @@ import torch
 x = torch.randn(2, 3)
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.take',
         stmt='''
@@ -306,7 +319,7 @@ src = torch.Tensor([[4, 3, 5], [6, 7, 8]])
 indices = torch.LongTensor([0, 2, 5])
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.transpose',
         stmt='''
@@ -317,7 +330,7 @@ import torch
 x = torch.randn(2, 3)
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.unbind',
         stmt='''
@@ -328,7 +341,7 @@ import torch
 x = torch.randn(2, 3)
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.unsqueeze',
         stmt='''
@@ -339,7 +352,7 @@ import torch
 x = torch.Tensor([1, 2, 3, 4])
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.bernoulli',
         stmt='''
@@ -350,7 +363,7 @@ import torch
 a = torch.Tensor(3, 3).uniform_(0, 1)
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.multinomial',
         stmt='''
@@ -361,19 +374,21 @@ import torch
 weights = torch.Tensor([0, 10, 3, 0])
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.normal',
         stmt='''
-torch.normal(mean=means_range, std=std)
+torch.normal(mean=mean, std=std_range)
 ''',
         setup='''
 import torch
-means_range = torch.randn(5).data
-std = 1.0
+std_range = torch.randn(5)
+if issubclass(type(std_range), torch.autograd.Variable):
+    std_range = std_range.data
+mean = 1.0
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.rand',
         stmt='''
@@ -383,7 +398,7 @@ torch.rand(2, 3)
 import torch
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.randn',
         stmt='''
@@ -393,7 +408,7 @@ torch.randn(2, 3)
 import torch
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.randperm',
         stmt='''
@@ -403,7 +418,7 @@ torch.randperm(100)
 import torch
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.abs',
         stmt='''
@@ -414,7 +429,7 @@ import torch
 x = torch.FloatTensor([-1, -2, 3])
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.acos',
         stmt='''
@@ -425,7 +440,7 @@ import torch
 a = torch.randn(4)
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.add',
         stmt='''
@@ -437,7 +452,7 @@ a = torch.randn(4)
 b = torch.randn(4)
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.addcdiv',
         stmt='''
@@ -450,7 +465,7 @@ t1 = torch.randn(6)
 t2 = torch.randn(6)
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.addcmul',
         stmt='''
@@ -463,7 +478,7 @@ t1 = torch.randn(6)
 t2 = torch.randn(6)
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.asin',
         stmt='''
@@ -474,7 +489,7 @@ import torch
 a = torch.randn(4)
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.atan',
         stmt='''
@@ -485,7 +500,7 @@ import torch
 a = torch.randn(4)
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.atan2',
         stmt='''
@@ -497,7 +512,7 @@ a = torch.randn(4)
 b = torch.randn(4)
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.ceil',
         stmt='''
@@ -508,7 +523,7 @@ import torch
 a = torch.randn(4)
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.clamp',
         stmt='''
@@ -519,7 +534,7 @@ import torch
 a = torch.randn(4)
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.cos',
         stmt='''
@@ -530,7 +545,7 @@ import torch
 a = torch.randn(4)
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.cosh',
         stmt='''
@@ -541,7 +556,7 @@ import torch
 a = torch.randn(4)
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.div',
         stmt='''
@@ -553,7 +568,7 @@ a = torch.randn(16)
 b = torch.randn(16)
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.erf',
         stmt='''
@@ -564,7 +579,7 @@ import torch
 a = torch.Tensor([0, -1., 10.])
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.erfinv',
         stmt='''
@@ -575,7 +590,7 @@ import torch
 a = torch.Tensor([0, 0.5, -1.])
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.exp',
         stmt='''
@@ -587,7 +602,7 @@ import math
 a = torch.Tensor([0, math.log(2)])
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.floor',
         stmt='''
@@ -598,7 +613,7 @@ import torch
 a = torch.randn(4)
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.fmod',
         stmt='''
@@ -609,7 +624,7 @@ import torch
 a = torch.Tensor([1, 2, 3, 4, 5])
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.frac',
         stmt='''
@@ -620,7 +635,7 @@ import torch
 a = torch.Tensor([1, 2.5, -3.2])
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.lerp',
         stmt='''
@@ -632,7 +647,7 @@ start = torch.arange(1, 5)
 end = torch.Tensor(4).fill_(10)
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.log',
         stmt='''
@@ -643,7 +658,7 @@ import torch
 a = torch.randn(5)
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.log1p',
         stmt='''
@@ -654,7 +669,7 @@ import torch
 a = torch.randn(5)
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.mul',
         stmt='''
@@ -666,7 +681,7 @@ a = torch.randn(16)
 b = torch.randn(16)
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.neg',
         stmt='''
@@ -677,7 +692,7 @@ import torch
 a = torch.randn(5)
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.pow',
         stmt='''
@@ -689,7 +704,7 @@ exp = torch.arange(1, 5)
 a = torch.arange(1, 5)
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.reciprocal',
         stmt='''
@@ -700,7 +715,7 @@ import torch
 a = torch.randn(4)
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.remainder',
         stmt='''
@@ -711,7 +726,7 @@ import torch
 a = torch.Tensor([1, 2, 3, 4, 5])
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.round',
         stmt='''
@@ -722,7 +737,7 @@ import torch
 a = torch.randn(4)
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.rsqrt',
         stmt='''
@@ -733,7 +748,7 @@ import torch
 a = torch.randn(4)
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.sigmoid',
         stmt='''
@@ -744,7 +759,7 @@ import torch
 a = torch.randn(4)
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.sign',
         stmt='''
@@ -755,7 +770,7 @@ import torch
 a = torch.randn(4)
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.sin',
         stmt='''
@@ -766,7 +781,7 @@ import torch
 a = torch.randn(4)
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.sinh',
         stmt='''
@@ -777,7 +792,7 @@ import torch
 a = torch.randn(4)
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.sqrt',
         stmt='''
@@ -788,7 +803,7 @@ import torch
 a = torch.randn(4)
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.tan',
         stmt='''
@@ -799,7 +814,7 @@ import torch
 a = torch.randn(4)
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.tanh',
         stmt='''
@@ -810,7 +825,7 @@ import torch
 a = torch.randn(4)
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.trunc',
         stmt='''
@@ -821,7 +836,7 @@ import torch
 a = torch.randn(4)
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.cumprod',
         stmt='''
@@ -832,7 +847,7 @@ import torch
 a = torch.randn(10)
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.cumsum',
         stmt='''
@@ -843,7 +858,7 @@ import torch
 a = torch.randn(10)
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.dist',
         stmt='''
@@ -855,7 +870,7 @@ x = torch.randn(4)
 y = torch.randn(4)
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.mean',
         stmt='''
@@ -866,7 +881,7 @@ import torch
 a = torch.randn(4, 4)
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.median',
         stmt='''
@@ -877,7 +892,7 @@ import torch
 a = torch.randn(4, 4)
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.mode',
         stmt='''
@@ -888,7 +903,7 @@ import torch
 a = torch.randn(4, 4)
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.norm',
         stmt='''
@@ -899,7 +914,7 @@ import torch
 a = torch.randn(4, 2)
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.prod',
         stmt='''
@@ -910,7 +925,7 @@ import torch
 a = torch.randn(4, 2)
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.std',
         stmt='''
@@ -921,7 +936,7 @@ import torch
 a = torch.randn(1, 3)
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.sum',
         stmt='''
@@ -932,7 +947,7 @@ import torch
 a = torch.randn(4, 4)
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.var',
         stmt='''
@@ -943,7 +958,7 @@ import torch
 a = torch.randn(4, 4)
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.eq',
         stmt='''
@@ -955,7 +970,7 @@ a = torch.Tensor([[1, 2], [3, 4]])
 b = torch.Tensor([[1, 1], [4, 4]])
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.equal',
         stmt='''
@@ -967,7 +982,7 @@ a = torch.Tensor([[1, 2], [3, 4]])
 b = torch.Tensor([[1, 1], [4, 4]])
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.ge',
         stmt='''
@@ -979,7 +994,7 @@ a = torch.Tensor([[1, 2], [3, 4]])
 b = torch.Tensor([[1, 1], [4, 4]])
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.gt',
         stmt='''
@@ -991,7 +1006,7 @@ a = torch.Tensor([[1, 2], [3, 4]])
 b = torch.Tensor([[1, 1], [4, 4]])
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.kthvalue',
         stmt='''
@@ -1002,7 +1017,7 @@ import torch
 x = torch.arange(1, 6)
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.le',
         stmt='''
@@ -1014,7 +1029,7 @@ a = torch.Tensor([[1, 2], [3, 4]])
 b = torch.Tensor([[1, 1], [4, 4]])
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.lt',
         stmt='''
@@ -1026,7 +1041,7 @@ a = torch.Tensor([[1, 2], [3, 4]])
 b = torch.Tensor([[1, 1], [4, 4]])
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.max',
         stmt='''
@@ -1037,7 +1052,7 @@ import torch
 a = torch.randn(4, 4)
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.min',
         stmt='''
@@ -1048,7 +1063,7 @@ import torch
 a = torch.randn(4, 4)
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.ne',
         stmt='''
@@ -1060,7 +1075,7 @@ a = torch.Tensor([[1, 2], [3, 4]])
 b = torch.Tensor([[1, 1], [4, 4]])
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.sort',
         stmt='''
@@ -1071,7 +1086,7 @@ import torch
 x = torch.randn(3, 4)
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.topk',
         stmt='''
@@ -1082,7 +1097,7 @@ import torch
 x = torch.arange(1, 6)
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.cross',
         stmt='''
@@ -1094,7 +1109,7 @@ a = torch.randn(4, 3)
 b = torch.randn(4, 3)
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.diag',
         stmt='''
@@ -1105,7 +1120,7 @@ import torch
 a = torch.randn(3)
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.histc',
         stmt='''
@@ -1116,7 +1131,7 @@ import torch
 a = torch.FloatTensor([1, 2, 1])
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.renorm',
         stmt='''
@@ -1129,7 +1144,7 @@ x[1].fill_(2)
 x[2].fill_(3)
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.trace',
         stmt='''
@@ -1140,7 +1155,7 @@ import torch
 x = torch.arange(1, 10).view(3, 3)
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.tril',
         stmt='''
@@ -1151,7 +1166,7 @@ import torch
 a = torch.randn(3,3)
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.triu',
         stmt='''
@@ -1162,7 +1177,7 @@ import torch
 a = torch.randn(3,3)
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.addbmm',
         stmt='''
@@ -1175,7 +1190,7 @@ batch1 = torch.randn(10, 3, 4)
 batch2 = torch.randn(10, 4, 5)
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.addmm',
         stmt='''
@@ -1188,7 +1203,7 @@ mat1 = torch.randn(2, 3)
 mat2 = torch.randn(3, 3)
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.addmv',
         stmt='''
@@ -1201,7 +1216,7 @@ mat = torch.randn(2, 3)
 vec = torch.randn(3)
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.addr',
         stmt='''
@@ -1214,7 +1229,7 @@ vec2 = torch.arange(1, 3)
 M = torch.zeros(3, 2)
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.baddbmm',
         stmt='''
@@ -1227,7 +1242,7 @@ batch1 = torch.randn(10, 3, 4)
 batch2 = torch.randn(10, 4, 5)
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.bmm',
         stmt='''
@@ -1239,7 +1254,7 @@ batch1 = torch.randn(10, 3, 4)
 batch2 = torch.randn(10, 4, 5)
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.btrifact',
         stmt='''
@@ -1250,7 +1265,7 @@ import torch
 A = torch.randn(2, 3, 3)
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.btrisolve',
         stmt='''
@@ -1263,7 +1278,7 @@ b = torch.randn(2, 3)
 A_LU = torch.btrifact(A)
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.dot',
         stmt='''
@@ -1275,7 +1290,7 @@ a = torch.Tensor([2, 3])
 b = torch.Tensor([2, 1])
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.gels',
         stmt='''
@@ -1295,7 +1310,7 @@ B = torch.Tensor([[-10, -3],
                 [ 18, 16]])
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.ger',
         stmt='''
@@ -1307,7 +1322,7 @@ v1 = torch.arange(1, 5)
 v2 = torch.arange(1, 4)
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.gesv',
         stmt='''
@@ -1325,7 +1340,7 @@ B = torch.Tensor([[4.02,  6.19, -8.22, -7.57, -3.03],
                     [9.81, -4.09, -4.57, -8.61,  8.99]]).t()
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.inverse',
         stmt='''
@@ -1336,7 +1351,7 @@ import torch
 x = torch.rand(10, 10)
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.matmul',
         stmt='''
@@ -1348,7 +1363,7 @@ mat1 = torch.randn(2, 3)
 mat2 = torch.randn(3, 3)
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.mm',
         stmt='''
@@ -1360,7 +1375,7 @@ mat1 = torch.randn(2, 3)
 mat2 = torch.randn(3, 3)
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.mv',
         stmt='''
@@ -1372,7 +1387,7 @@ mat = torch.randn(2, 3)
 vec = torch.randn(3)
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.potrf',
         stmt='''
@@ -1385,7 +1400,7 @@ a = torch.Tensor([[5.4417, -2.5280, 1.3643],
                 [1.3643, -2.1368, 4.6116]])
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.potri',
         stmt='''
@@ -1399,7 +1414,7 @@ a = torch.Tensor([[5.4417, -2.5280, 1.3643],
 u = torch.potrf(a)
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.potrs',
         stmt='''
@@ -1414,7 +1429,7 @@ u = torch.potrf(a)
 b = torch.randn(3,2)
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.pstrf',
         stmt='''
@@ -1427,7 +1442,7 @@ a = torch.Tensor([[5.4417, -2.5280, 1.3643],
                 [1.3643, -2.1368, 4.6116]])
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.qr',
         stmt='''
@@ -1438,7 +1453,7 @@ import torch
 a = torch.Tensor([[12, -51, 4], [6, 167, -68], [-4, 24, -41]])
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.svd',
         stmt='''
@@ -1453,7 +1468,7 @@ a = torch.Tensor([[8.79,  6.11, -9.15,  9.57, -3.49,  9.84],
                     [3.16,  7.98,  3.01,  5.80,  4.27, -5.31]]).t()
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.symeig',
         stmt='''
@@ -1468,7 +1483,7 @@ a = torch.Tensor([[ 1.96,  0.00,  0.00,  0.00,  0.00],
                    [-0.65, -6.34,  2.67,  1.80, -7.10]]).t()
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
 
 measure(test_name='torch.trtrs',
         stmt='''
@@ -1480,4 +1495,4 @@ A = torch.randn(2,2).triu()
 b = torch.randn(2,3)
 ''',
         number=1000,
-        repeat=100)
+        repeat=20)
