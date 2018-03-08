@@ -8,7 +8,7 @@ import json
 import time
 
 MAX_TRIAL = 10
-COOLDOWN_PERIOD = 5
+COOLDOWN_PERIOD = 30
 
 parser = argparse.ArgumentParser(description='Process some integers.')
 parser.add_argument('--compare', dest='compare_data_file_path', action='store',
