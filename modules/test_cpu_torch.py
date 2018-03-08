@@ -5,8 +5,10 @@ import argparse
 import numpy
 import subprocess
 import json
+import time
 
 MAX_TRIAL = 10
+COOLDOWN_PERIOD = 5
 
 parser = argparse.ArgumentParser(description='Process some integers.')
 parser.add_argument('--compare', dest='compare_data_file_path', action='store',
@@ -55,7 +57,8 @@ def measure(test_name, stmt, setup, number, repeat, trial=0):
 z-value >= 3 in all {} trials, there is perf regression.\n
 '''.format(trial))
             else:
-                print("z-value >= 3, doing another trial.")
+                print("z-value >= 3, doing another trial in {} seconds.".format(COOLDOWN_PERIOD))
+                time.sleep(COOLDOWN_PERIOD)
                 measure(test_name, stmt, setup, number, repeat, trial)
         else:
             print("z-value < 3, no perf regression detected.")
