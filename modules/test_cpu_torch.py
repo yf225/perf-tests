@@ -9,6 +9,7 @@ from time import process_time
 
 MAX_TRIAL = 10
 COOLDOWN_PERIOD = 10
+Z_VALUE_BOUND = 2
 
 parser = argparse.ArgumentParser(description='Process some integers.')
 parser.add_argument('--compare', dest='compare_data_file_path', action='store',
@@ -65,17 +66,17 @@ def measure(test_name, stmt, setup, number, repeat, trial=0):
             baseline_sigma = 0.01
         z_value = (sample_mean - baseline_mean) / baseline_sigma
         print("z-value: {}".format(z_value))
-        if z_value >= 3:
+        if z_value >= Z_VALUE_BOUND:
             if trial == MAX_TRIAL:
                 raise Exception('''\n
-z-value >= 3 in all {} trials, there is perf regression.\n
-'''.format(trial))
+z-value >= {} in all {} trials, there is perf regression.\n
+'''.format(Z_VALUE_BOUND, trial))
             else:
-                print("z-value >= 3, doing another trial in {} seconds.".format(COOLDOWN_PERIOD))
+                print("z-value >= {}, doing another trial in {} seconds.".format(Z_VALUE_BOUND, COOLDOWN_PERIOD))
                 time.sleep(COOLDOWN_PERIOD)
                 measure(test_name, stmt, setup, number, repeat, trial)
         else:
-            print("z-value < 3, no perf regression detected.")
+            print("z-value < {}, no perf regression detected.".format(Z_VALUE_BOUND))
 
     if should_update:
         if not test_name in update_data:
