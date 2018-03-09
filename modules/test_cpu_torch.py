@@ -85,7 +85,7 @@ z-value >= 3 in all {} trials, there is perf regression.\n
         with open(args.update_data_file_path, 'w') as update_data_file:
             json.dump(update_data, update_data_file, indent=4)
 
-only_test_name = 'torch.numel'
+only_test_name = None
 
 measure(test_name='torch.numel',
         stmt='''
