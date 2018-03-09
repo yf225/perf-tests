@@ -9,7 +9,7 @@ from time import process_time
 
 MAX_TRIAL = 10
 COOLDOWN_PERIOD = 10
-Z_VALUE_BOUND = 2
+Z_VALUE_BOUND = 3
 
 parser = argparse.ArgumentParser(description='Process some integers.')
 parser.add_argument('--compare', dest='compare_data_file_path', action='store',
