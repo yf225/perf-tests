@@ -1,6 +1,5 @@
 import sys
 import timeit
-import torch
 import argparse
 import numpy
 import subprocess
@@ -86,7 +85,7 @@ z-value >= 3 in all {} trials, there is perf regression.\n
         with open(args.update_data_file_path, 'w') as update_data_file:
             json.dump(update_data, update_data_file, indent=4)
 
-only_test_name = None
+only_test_name = 'torch.numel'
 
 measure(test_name='torch.numel',
         stmt='''
