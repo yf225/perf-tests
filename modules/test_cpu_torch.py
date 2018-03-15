@@ -7,7 +7,7 @@ import json
 import time
 from time import process_time
 
-MAX_TRIAL = 10
+MAX_TRIAL = 5
 COOLDOWN_PERIOD = 10
 Z_VALUE_BOUND = 3
 
