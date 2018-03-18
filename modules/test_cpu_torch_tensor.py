@@ -1,32 +1,79 @@
-import sys
-import timeit
+from common import PerfTestCase
+
+tc = PerfTestCase()
+
+tc.measure(test_name='torch.tensor[]',
+        stmt='''
+t[0]
+''',
+        setup='''
 import torch
-import argparse
-import numpy
-import subprocess
+t = torch.ones(3)
+''',
+        number=1000,
+        repeat=20)
 
-# You should import the common methods from another file!
+tc.measure(test_name='torch.tensor.index',
+        stmt='''
+t.index(0)
+''',
+        setup='''
+import torch
+t = torch.ones(3)
+''',
+        number=1000,
+        repeat=20)
 
-# measure(test_name='torch.numel',
-#         stmt='''
-# torch.numel(t)
-# ''',
-#         setup='''
-# import torch
-# t = torch.ones(1, 1)
-# ''',
-#         number=1000,
-#         repeat=200)
+tc.measure(test_name='torch.tensor.index_add_',
+        stmt='''
+x.index_add_(0, index, t)
+''',
+        setup='''
+import torch
+x = torch.Tensor(5, 3).fill_(1)
+t = torch.Tensor([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
+index = torch.LongTensor([0, 4, 2])
+''',
+        number=1000,
+        repeat=20)
+
+tc.measure(test_name='torch.tensor.index_copy_',
+        stmt='''
+x.index_copy_(0, index, t)
+''',
+        setup='''
+import torch
+x = torch.zeros(5, 3)
+t = torch.Tensor([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
+index = torch.LongTensor([0, 4, 2])
+''',
+        number=1000,
+        repeat=20)
+
+tc.measure(test_name='torch.tensor.index_fill_',
+        stmt='''
+x.index_fill_(1, index, -1)
+''',
+        setup='''
+import torch
+x = torch.Tensor([[1, 2, 3], [4, 5, 6], [7, 8, 9]])
+index = torch.LongTensor([0, 2])
+''',
+        number=1000,
+        repeat=20)
+
+tc.measure(test_name='torch.tensor[:]',
+        stmt='''
+x[1:3]
+''',
+        setup='''
+import torch
+x = torch.ones(5)
+''',
+        number=1000,
+        repeat=20)
 
 # TODO:
-
-# Tensor indexing: x[0]
-# Tensor indexing: index(m)
-# index_add_(dim, index, tensor) → Tensor
-# index_copy_(dim, index, tensor) → Tensor
-# index_fill_(dim, index, val) → Tensor
-
-# Tensor slicing: x[1:3]
 
 # Tensor math: +-*/
 
