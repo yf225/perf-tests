@@ -18,7 +18,17 @@ class PerfTestCase():
                                  help='perf test data to compare with')
         self.parser.add_argument('--update', dest='update_data_file_path', action='store',
                                  help='perf test data to update')
-        self.args = self.parser.parse_args()
+
+        # yf225: couldn't figure out how to let Bash pass variables without quotes, so have to use this workaround
+        args_str = ''
+        if len(sys.argv) > 2:
+            args_str = ' '.join(str(x) for x in sys.argv[1:])
+        elif len(sys.argv) == 2:
+            args_str = sys.argv[1]
+        args_list = None
+        if args_str != '':
+            args_list = args_str.split(' ')
+        self.args = self.parser.parse_args(args_list)
 
         self.should_compare = False
         self.should_update = False

@@ -15,11 +15,12 @@ t = torch.ones(3)
 
 tc.measure(test_name='torch.Tensor.index',
         stmt='''
-t.index(0)
+t.index((index,))
 ''',
         setup='''
 import torch
 t = torch.ones(3)
+index = torch.zeros(1)
 ''',
         number=500,
         repeat=20)
