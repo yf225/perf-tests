@@ -20,7 +20,7 @@ t.index((index,))
         setup='''
 import torch
 t = torch.ones(3)
-index = torch.zeros(1)
+index = torch.ones(3).byte()
 ''',
         number=500,
         repeat=20)
