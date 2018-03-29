@@ -87,7 +87,7 @@ z-value >= {} in all {} trials, there is perf regression.\n
                 else:
                     print("z-value >= {}, doing another trial in {} seconds.".format(Z_VALUE_BOUND, COOLDOWN_PERIOD))
                     time.sleep(COOLDOWN_PERIOD)
-                    measure(test_name, stmt, setup, number, repeat, trial)
+                    self.measure(test_name, stmt, setup, number, repeat, trial)
             else:
                 print("z-value < {}, no perf regression detected.".format(Z_VALUE_BOUND))
 
