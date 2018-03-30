@@ -9,7 +9,7 @@ from time import process_time
 
 MAX_TRIAL = 5
 COOLDOWN_PERIOD = 10 # seconds
-Z_VALUE_BOUND = 100 # yf225: this is a temporary value to get the test to pass
+Z_VALUE_BOUND = 3
 
 class PerfTestCase():
     def __init__(self):
