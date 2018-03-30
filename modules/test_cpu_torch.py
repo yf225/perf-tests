@@ -1066,9 +1066,9 @@ torch.trace(x)
 ''',
         setup='''
 import torch
-x = torch.arange(1, 10).view(3, 3)
+x = torch.arange(1, 1000001).view(1000, 1000)
 ''',
-        number=500,
+        number=1000,
         repeat=20)
 
 tc.measure(test_name='torch.tril',
@@ -1187,8 +1187,8 @@ x = b.btrisolve(*A_LU)
 ''',
         setup='''
 import torch
-A = torch.randn(2, 3, 3)
-b = torch.randn(2, 3)
+A = torch.randn(20, 30, 30)
+b = torch.randn(20, 30)
 A_LU = torch.btrifact(A)
 ''',
         number=500,
