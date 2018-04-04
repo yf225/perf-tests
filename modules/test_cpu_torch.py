@@ -551,17 +551,17 @@ a = torch.Tensor([1, 2.5, -3.2])
         number=500,
         repeat=20)
 
-tc.measure(test_name='torch.lerp',
-        stmt='''
-torch.lerp(start, end, 0.5)
-''',
-        setup='''
-import torch
-start = torch.arange(1, 5)
-end = torch.Tensor(4).fill_(10)
-''',
-        number=500,
-        repeat=20)
+# tc.measure(test_name='torch.lerp',
+#         stmt='''
+# torch.lerp(start, end, 0.5)
+# ''',
+#         setup='''
+# import torch
+# start = torch.arange(1, 5)
+# end = torch.Tensor(4).fill_(10)
+# ''',
+#         number=500,
+#         repeat=20)
 
 tc.measure(test_name='torch.log',
         stmt='''
