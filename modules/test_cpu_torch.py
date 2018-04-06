@@ -830,16 +830,16 @@ a = torch.randn(4, 2)
         number=500,
         repeat=20)
 
-# tc.measure(test_name='torch.prod',
-#         stmt='''
-# torch.prod(a, 1)
-# ''',
-#         setup='''
-# import torch
-# a = torch.randn(4, 2)
-# ''',
-#         number=500,
-#         repeat=20)
+tc.measure(test_name='torch.prod',
+        stmt='''
+torch.prod(a, 1)
+''',
+        setup='''
+import torch
+a = torch.randn(4, 2)
+''',
+        number=500,
+        repeat=20)
 
 tc.measure(test_name='torch.std',
         stmt='''
@@ -852,16 +852,16 @@ a = torch.randn(1, 3)
         number=500,
         repeat=20)
 
-# tc.measure(test_name='torch.sum',
-#         stmt='''
-# torch.sum(a, 1)
-# ''',
-#         setup='''
-# import torch
-# a = torch.randn(4, 4)
-# ''',
-#         number=500,
-#         repeat=20)
+tc.measure(test_name='torch.sum',
+        stmt='''
+torch.sum(a, 1)
+''',
+        setup='''
+import torch
+a = torch.randn(4, 4)
+''',
+        number=500,
+        repeat=20)
 
 tc.measure(test_name='torch.var',
         stmt='''
