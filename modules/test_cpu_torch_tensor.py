@@ -24,7 +24,7 @@ t = torch.randn(10, 10, 10)
         number=500,
         repeat=20)
 
-tc.measure(test_name='torch.Tensor[tensor]',
+tc.measure(test_name='torch.Tensor[zero_dim_tensor]',
         stmt='''
 x[idx]
 ''',
@@ -35,6 +35,35 @@ x = torch.arange(9).reshape(3, 3)
 ''',
         number=500,
         repeat=20)
+
+tc.measure(test_name='torch.Tensor[one_dim_tensor]',
+        stmt='''
+x[idx]
+''',
+        setup='''
+import torch
+idx = torch.zeros(3).byte()
+idx[1] = 1
+x = torch.arange(9).reshape(3, 3)
+''',
+        number=500,
+        repeat=20)
+
+tc.measure(test_name='torch.Tensor[multi_dim_tensor]',
+        stmt='''
+x[idx]
+''',
+        setup='''
+import torch
+idx = torch.zeros(3, 3).byte()
+idx[1][1] = 1
+idx[1][2] = 1
+idx[2][1] = 1
+x = torch.arange(9).reshape(3, 3)
+''',
+        number=500,
+        repeat=20)
+
 
 tc.measure(test_name='torch.Tensor.index',
         stmt='''
