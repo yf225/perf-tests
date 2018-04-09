@@ -13,6 +13,17 @@ t = torch.ones(3)
         number=500,
         repeat=20)
 
+tc.measure(test_name='torch.Tensor[]_multidim',
+        stmt='''
+t[0]
+''',
+        setup='''
+import torch
+t = torch.randn(10, 10, 10)
+''',
+        number=500,
+        repeat=20)
+
 tc.measure(test_name='torch.Tensor[tensor]',
         stmt='''
 x[idx]
