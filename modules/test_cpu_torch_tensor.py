@@ -13,6 +13,18 @@ t = torch.ones(3)
         number=500,
         repeat=20)
 
+tc.measure(test_name='torch.Tensor[tensor]',
+        stmt='''
+x[idx]
+''',
+        setup='''
+import torch
+idx = torch.tensor(0, dtype=torch.int64)
+x = torch.arange(9).reshape(3, 3)
+''',
+        number=500,
+        repeat=20)
+
 tc.measure(test_name='torch.Tensor.index',
         stmt='''
 t.index((index,))
