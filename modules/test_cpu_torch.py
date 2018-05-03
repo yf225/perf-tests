@@ -551,17 +551,17 @@ a = torch.Tensor([1, 2.5, -3.2])
         number=500,
         repeat=20)
 
-tc.measure(test_name='torch.lerp',
-        stmt='''
-torch.lerp(start, end, 0.5)
-''',
-        setup='''
-import torch
-start = torch.arange(1, 5)
-end = torch.Tensor(4).fill_(10)
-''',
-        number=500,
-        repeat=20)
+# tc.measure(test_name='torch.lerp',
+#         stmt='''
+# torch.lerp(start, end, 0.5)
+# ''',
+#         setup='''
+# import torch
+# start = torch.arange(1, 5)
+# end = torch.Tensor(4).fill_(10)
+# ''',
+#         number=500,
+#         repeat=20)
 
 tc.measure(test_name='torch.log',
         stmt='''
@@ -1132,18 +1132,18 @@ vec = torch.randn(3)
         number=500,
         repeat=20)
 
-tc.measure(test_name='torch.addr',
-        stmt='''
-torch.addr(M, vec1, vec2)
-''',
-        setup='''
-import torch
-vec1 = torch.arange(1, 4)
-vec2 = torch.arange(1, 3)
-M = torch.zeros(3, 2)
-''',
-        number=500,
-        repeat=20)
+# tc.measure(test_name='torch.addr',
+#         stmt='''
+# torch.addr(M, vec1, vec2)
+# ''',
+#         setup='''
+# import torch
+# vec1 = torch.arange(1, 4)
+# vec2 = torch.arange(1, 3)
+# M = torch.zeros(3, 2)
+# ''',
+#         number=500,
+#         repeat=20)
 
 tc.measure(test_name='torch.baddbmm',
         stmt='''
